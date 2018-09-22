@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "Game_Api.h"
+#include <vector>
 using json = nlohmann::json;
 using Player = Game_Api::Player;
 using Monster = Game_Api::Monster;
@@ -50,12 +51,17 @@ int main() {
 				//if any monsters of that type were found
 				if (monsters.size() > 0)  {
 					//look for Speed
-					for(Monster m: monsters){
-						if(m._death_effects._speed == 0){
-							monsters.erase(0);
-						}
-					}
+					// int s;
+					// for(int i = 0; i < monsters.size(); i++){
+					// 	if(monsters[i]._death_effects._speed != 0){
+					// 		//monsters.erase(0);
+					// 		s = i;
+					// 		break;
+					// 		//Monster target = monsters[i];
+					// 	}
+					// }
 
+					//Monster target = monsters[0];
 					Monster target = monsters[0];
 					if(target._stance == "Rock") stance = "Paper";
 					else if(target._stance == "Paper") stance = "Scissors";
@@ -91,20 +97,46 @@ int main() {
 			     }
 		     }
 
+				 // if(me._location == 0)
+				 // vector<vector<node_id_t>> shortest_paths = api->shortest_paths(me._location, 3);
+				 // else if(me._location == 3)
+				 // vector<vector<node_id_t>> shortest_paths = api->shortest_paths(me._location, 0);
+				 // else if(me._location == )
+				 // vector<vector<node_id_t>> shortest_paths = api->shortest_paths(me._location, 0);
+
+				 on_route = true;
+
 
 
 			 if (on_route) {
-				 if(me._location == desired_path.back()) {
-					 on_route = false;
-					 desired_path.clear();
-					 current_steps_taken_in_path = 0;
-				 } else if(me._location == desired_path[current_steps_taken_in_path]) {
-					 current_steps_taken_in_path++;
-					 destination_decision = desired_path[current_steps_taken_in_path];
-				 } else {
-		     	     destination_decision = desired_path[current_steps_taken_in_path];
-			     }
+				 //if(me._location == desired_path.back()) {
+					  on_route = false;
+					//  desired_path.clear();
+					//  current_steps_taken_in_path = 0;
+				 // } else if(me._location == desired_path[current_steps_taken_in_path]) {
+					//  current_steps_taken_in_path++;
+					//  destination_decision = desired_path[current_steps_taken_in_path];
+				 // } else {
+		     // 	     destination_decision = desired_path[current_steps_taken_in_path];
+			   //   }
+				 if(me._location == 0) destination_decision = 1;
+				 else if(me._location == 1) destination_decision = 3;
+				 else if(me._location == 3) destination_decision = 2;
+				 else if(me._location == 2) destination_decision = 4;
+				 else if(me._location == 4) destination_decision = 5;
+				 else if(me._location == 5) destination_decision = 6;
+				 else if(me._location == 6) destination_decision = 0;
+
+
+
 			 }
+			 if(me._location == opponent._location){
+				 if(opponent._stance == "Rock") stance = "Paper";
+				 else if(opponent._stance == "Paper") stance = "Scissors";
+				 else if(opponent._stance == "Scissors") stance = "Rock";
+			 }
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 

@@ -42,27 +42,13 @@ int main() {
 			string stance = "Rock";
 			//you dont want to perform the operation below every turn. Only if you have reached your final destination
 			if (!on_route) {
-
-				//TODO change next line
-			if (1) {
+			if (opponent._rock >= me._rock) {
 				//Want to kill the nearest monster of type "Paper 6"
-				vector<Monster> monsters = api->nearest_monsters(me._location, 1);
+				vector<Monster> monsters = api->nearest_monsters(me._location, "Paper 18", 0);
 				//if any monsters of that type were found
 				if (monsters.size() > 0)  {
-					//look for Speed
-					for(Monster m: monsters){
-						if(m._death_effects._speed == 0){
-							monsters.erase(0);
-						}
-					}
-
 					Monster target = monsters[0];
-					if(target._stance == "Rock") stance = "Paper";
-					else if(target._stance == "Paper") stance = "Scissors";
-					else if(target._stance == "Scissors") stance = "Rock";
-
 					vector<vector<node_id_t>> shortest_paths = api->shortest_paths(me._location, target._location);
-
 
 					//Want to take the least dangerous path, so sum monster attacks on each path
 					vector<int> cumulative_monster_attacks_in_path;
@@ -90,9 +76,6 @@ int main() {
 				     }
 			     }
 		     }
-
-
-
 			 if (on_route) {
 				 if(me._location == desired_path.back()) {
 					 on_route = false;

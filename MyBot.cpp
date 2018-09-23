@@ -4,6 +4,7 @@
 #include <time.h>
 #include "Game_Api.h"
 #include <vector>
+#include <iostream>
 using json = nlohmann::json;
 using Player = Game_Api::Player;
 using Monster = Game_Api::Monster;
@@ -67,7 +68,44 @@ int main() {
 					else if(target._stance == "Paper") stance = "Scissors";
 					else if(target._stance == "Scissors") stance = "Rock";
 
-					vector<vector<node_id_t>> shortest_paths = api->shortest_paths(me._location, target._location);
+					//vector<vector<node_id_t>> shortest_paths = api->shortest_paths(me._location, target._location);
+					vector<vector<node_id_t>> shortest_paths = api->shortest_paths(me._location, 0);
+
+					//if(monter)
+
+					// TODO see if we can do if the monster at 0's counter will be done
+					// by the time we would get there
+					if(api->has_monster(0)){
+
+						Monster zeromonster = api->get_monster(0);
+						if(!zeromonster._dead){
+							int zeromonsterCounter = zeromonster._respawn_counter;
+							vector<vector<node_id_t>> pathToZero = api->shortest_paths(me._location, 0);
+							if(pathToZero[0].size() >= zeromonsterCounter){
+								shortest_paths = api->shortest_paths(me._location, 0);
+							}
+						}
+
+					}
+					// if(me._health < 100 && me._location != 0 && api->has_monster(0)){
+					// 	//std::cout << "health is less than 100 :()" << std::endl;
+					// 	shortest_paths = api->shortest_paths(me._location, 0);
+					//
+					// }
+//TODO fix monster not dying in time
+					else{
+						//std::cout << "health is greater than 100" << std::endl;
+
+						int total_reward = 0;
+						for(int i = 0; i < 4; i++){
+							if(monsters[i]._death_effects._speed + monsters[i]._death_effects._health + monsters[i]._death_effects._rock + monsters[i]._death_effects._paper + monsters[i]._death_effects._scissors > total_reward){
+								total_reward = monsters[i]._death_effects._speed + monsters[i]._death_effects._health + monsters[i]._death_effects._rock + monsters[i]._death_effects._paper + monsters[i]._death_effects._scissors;
+								target = monsters[i];
+							}
+						}
+						shortest_paths = api->shortest_paths(me._location, target._location);
+					}
+
 
 
 					//Want to take the least dangerous path, so sum monster attacks on each path
@@ -104,28 +142,32 @@ int main() {
 				 // else if(me._location == )
 				 // vector<vector<node_id_t>> shortest_paths = api->shortest_paths(me._location, 0);
 
-				 on_route = true;
+				 //on_route = true;
 
 
 
 			 if (on_route) {
-				 //if(me._location == desired_path.back()) {
-					  on_route = false;
-					//  desired_path.clear();
-					//  current_steps_taken_in_path = 0;
-				 // } else if(me._location == desired_path[current_steps_taken_in_path]) {
-					//  current_steps_taken_in_path++;
-					//  destination_decision = desired_path[current_steps_taken_in_path];
-				 // } else {
-		     // 	     destination_decision = desired_path[current_steps_taken_in_path];
-			   //   }
-				 if(me._location == 0) destination_decision = 1;
-				 else if(me._location == 1) destination_decision = 3;
-				 else if(me._location == 3) destination_decision = 2;
-				 else if(me._location == 2) destination_decision = 4;
-				 else if(me._location == 4) destination_decision = 5;
-				 else if(me._location == 5) destination_decision = 6;
-				 else if(me._location == 6) destination_decision = 0;
+
+				 //if(me._health < 100){
+					 if(me._location == desired_path.back()) {
+						  on_route = false;
+						 desired_path.clear();
+						 current_steps_taken_in_path = 0;
+					 } else if(me._location == desired_path[current_steps_taken_in_path]) {
+						 current_steps_taken_in_path++;
+						 destination_decision = desired_path[current_steps_taken_in_path];
+					 } else {
+			     	     destination_decision = desired_path[current_steps_taken_in_path];
+				     }
+
+				 //}
+				 // if(me._location == 0) destination_decision = 1;
+				 // else if(me._location == 1) destination_decision = 3;
+				 // else if(me._location == 3) destination_decision = 2;
+				 // else if(me._location == 2) destination_decision = 4;
+				 // else if(me._location == 4) destination_decision = 5;
+				 // else if(me._location == 5) destination_decision = 6;
+				 // else if(me._location == 6) destination_decision = 0;
 
 
 
